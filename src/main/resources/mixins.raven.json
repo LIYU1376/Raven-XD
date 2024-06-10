@@ -16,5 +16,6 @@
   ],
   "client": [
     "client.KeyBindingAccessor"
+    "render.MixinEntityRenderer"
   ]
 }

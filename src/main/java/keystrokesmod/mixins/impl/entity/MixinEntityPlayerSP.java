@@ -8,6 +8,7 @@ import keystrokesmod.event.PreUpdateEvent;
 import keystrokesmod.module.ModuleManager;
 import keystrokesmod.module.impl.movement.NoSlow;
 import keystrokesmod.utility.RotationUtils;
+import keystrokesmod.utility.Utils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.entity.AbstractClientPlayer;

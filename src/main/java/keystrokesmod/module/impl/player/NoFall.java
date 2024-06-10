@@ -22,6 +22,7 @@ import org.jetbrains.annotations.NotNull;
 public class NoFall extends Module {
     public final SliderSetting mode;
     private final SliderSetting minFallDistance;
+    private ButtonSetting disableAdventure;
     private final ButtonSetting ignoreVoid;
     private final String[] modes = new String[]{"Spoof", "Extra", "NoGround", "Blink", "Alan34"};
 
@@ -33,11 +34,15 @@ public class NoFall extends Module {
         super("NoFall", category.player);
         this.registerSetting(mode = new SliderSetting("Mode", modes, 0));
         this.registerSetting(minFallDistance = new SliderSetting("Minimum fall distance", 3.0, 0.0, 8.0, 0.1));
+        this.registerSetting(disableAdventure = new ButtonSetting("Disable adventure", false));
         this.registerSetting(ignoreVoid = new ButtonSetting("Ignore void", true));
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onPreMotion(PreMotionEvent e) {
+        if (disableAdventure.isToggled() && mc.playerController.getCurrentGameType().isAdventure()) {
+            return;
+        }
         if (ignoreVoid.isToggled() && isVoid()) {
             return;
         }
@@ -49,6 +54,9 @@ public class NoFall extends Module {
     }
 
     public void onUpdate() {
+        if (disableAdventure.isToggled() && mc.playerController.getCurrentGameType().isAdventure()) {
+            return;
+        }
         if (ignoreVoid.isToggled() && isVoid()) {
             return;
         }

@@ -95,7 +95,7 @@ public class KillAura extends Module {
         this.registerSetting(swingRange = new SliderSetting("Swing range", 3.3, 3.0, 8.0, 0.1));
         this.registerSetting(blockRange = new SliderSetting("Block range", 6.0, 3.0, 12.0, 0.1));
         this.registerSetting(rotationMode = new SliderSetting("Rotation mode", rotationModes, 0));
-        this.registerSetting(rotationSmoothing = new SliderSetting("Rotation smoothing", 0, 0, 100, 1));
+        this.registerSetting(rotationSmoothing = new SliderSetting("Rotation smoothing", 0, 0, 15, 1));
         String[] sortModes = new String[]{"Health", "Hurttime", "Distance", "Yaw"};
         this.registerSetting(sortMode = new SliderSetting("Sort mode", sortModes, 0.0));
         this.registerSetting(switchDelay = new SliderSetting("Switch delay", 200.0, 50.0, 1000.0, 25.0, "ms"));
@@ -269,12 +269,12 @@ public class KillAura extends Module {
         setTarget(new float[]{e.getYaw(), e.getPitch()});
         if (target != null && rotationMode.getInput() == 1) {
             float[] rotations = RotationUtils.getRotations(target, e.getYaw(), e.getPitch());
-            if (rotationSmoothing.getInput() >= 4) {
+            if (rotationSmoothing.getInput() > 0) {
                 if (!startSmoothing) {
                     prevRotations = new float[]{mc.thePlayer.rotationYaw, mc.thePlayer.rotationPitch};
                     startSmoothing = true;
                 }
-                float[] speed = new float[]{(float) ((rotations[0] - prevRotations[0]) / ((rotationSmoothing.getInput()) * 0.262843)), (float) ((rotations[1] - prevRotations[1]) / ((rotationSmoothing.getInput()) * 0.1637))};
+                float[] speed = new float[]{(float) ((rotations[0] - prevRotations[0]) / Math.max(((rotationSmoothing.getInput()) * 0.262843), 1.5)), (float) ((rotations[1] - prevRotations[1]) / Math.max(((rotationSmoothing.getInput()) * 0.1637), 1.5))};
                 prevRotations[0] += speed[0];
                 prevRotations[1] += speed[1];
                 if (prevRotations[1] > 90) {
@@ -314,6 +314,9 @@ public class KillAura extends Module {
         }
         Packet<?> packet = e.getPacket();
         if (packet.getClass().getSimpleName().startsWith("S")) {
+            return;
+        }
+        if (packet instanceof C00PacketKeepAlive) {
             return;
         }
         blinkedPackets.add(e.getPacket());

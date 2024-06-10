@@ -20,7 +20,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.C07PacketPlayerDigging;
 import net.minecraft.network.play.client.C09PacketHeldItemChange;
-import net.minecraft.network.play.client.C0APacketAnimation;
 import net.minecraft.network.play.server.S12PacketEntityVelocity;
 import net.minecraft.network.play.server.S27PacketExplosion;
 import net.minecraft.util.BlockPos;
@@ -205,7 +204,7 @@ public class BedAura extends Module {
         else {
             outlineColor = defaultOutlineColor;
         }
-        RenderUtils.renderBlock(currentBlock, outlineColor, true, false);
+        RenderUtils.renderBlock(currentBlock, outlineColor, (Arrays.asList(bedPos).contains(currentBlock) ? 0.5625 : 1),true, false);
     }
 
     private void resetSlot() {
@@ -347,12 +346,7 @@ public class BedAura extends Module {
     }
 
     private void swing() {
-        if (!silentSwing.isToggled()) {
-            mc.thePlayer.swingItem();
-        }
-        else {
-            mc.thePlayer.sendQueue.addToSendQueue(new C0APacketAnimation());
-        }
+        mc.thePlayer.swingItem();
     }
 
     private void breakBlock(BlockPos blockPos) {
@@ -375,7 +369,9 @@ public class BedAura extends Module {
         }
         currentBlock = blockPos;
         Block block = BlockUtils.getBlock(blockPos);
-        swing();
+        if (!silentSwing.isToggled()) {
+            swing();
+        }
         if (mode.getInput() == 2 || mode.getInput() == 0) {
             if (breakProgress == 0) {
                 resetSlot();
@@ -431,10 +427,11 @@ public class BedAura extends Module {
         else if (mode.getInput() == 1) {
             stopAutoblock = true;
             rotate = true;
-            swing();
+            if (!silentSwing.isToggled()) {
+                swing();
+            }
             startBreak(blockPos);
             setSlot(Utils.getTool(block));
-            swing();
             stopBreak(blockPos);
         }
     }

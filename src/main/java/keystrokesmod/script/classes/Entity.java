@@ -18,7 +18,7 @@ import java.util.List;
 public class Entity {
     public net.minecraft.entity.Entity entity;
     public String type;
-    public int entityID;
+    public int entityId;
 
     public Entity(net.minecraft.entity.Entity entity) {
         this.entity = entity;
@@ -26,7 +26,7 @@ public class Entity {
             return;
         }
         this.type = entity.getClass().getSimpleName();
-        this.entityID = entity.getEntityId();
+        this.entityId = entity.getEntityId();
     }
 
     public boolean allowEditing() {
@@ -170,6 +170,13 @@ public class Entity {
             potionEffects.add(potionData);
         }
         return potionEffects;
+    }
+
+    public ItemStack getArmorInSlot(int slot) {
+        if (!(entity instanceof EntityLivingBase)) {
+            return null;
+        }
+        return ItemStack.convert(((EntityLivingBase) entity).getCurrentArmor(slot));
     }
 
     public double getSpeed() {

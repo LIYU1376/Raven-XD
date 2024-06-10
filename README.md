@@ -14,7 +14,7 @@
 [![Modrinth Downloads](https://img.shields.io/modrinth/dt/QNVaUzHT?label=Modrinth%20Downloads&logo=Modrinth%20Downloads&style=flat-square)](https://modrinth.com/mod/cheatdetector)
 -->
 
-Raven B4, but for those who can't afford it.
+Raven B4, but for those who can't afford it, or too paranoid to get it. We highly value our user's privacy.
 
 ![ScreenShot](https://github.com/xia-mc/Raven-bS/assets/108219418/3a731ca8-7655-4445-8a4b-b7fef5bb5654)
 
